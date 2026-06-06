@@ -1,0 +1,9 @@
+# Arquivos de build (não suba isso!)
+bin/
+obj/
+
+# Suas configurações locais
+client_id.txt
+
+# Pastas do VS Code
+.vscode/
