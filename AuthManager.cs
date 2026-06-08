@@ -1,25 +1,17 @@
 using System;
-using System.Text;
 using System.Threading.Tasks;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Auth.Microsoft;
-using XboxAuthNet.Game.Msal;
 using Spectre.Console;
 
 namespace nkLauncher
 {
     public class AuthManager
     {
-        private readonly string _clientId; 
         private readonly JELoginHandler _loginHandler;
 
         public AuthManager()
         {
-           string ofuscado = "NTIzNDE3ZjktODIzNS00YzQ4LWE3ODUtMDkwNDBkYzJkYTVj";
-
-           byte[] dados = Convert.FromBase64String(ofuscado);
-            _clientId = Encoding.UTF8.GetString(dados);
-
             _loginHandler = JELoginHandlerBuilder.BuildDefault();
         }
 
@@ -27,33 +19,17 @@ namespace nkLauncher
         {
             try
             {
-                AnsiConsole.MarkupLine("\n[grey]Procurando sessão salva da Microsoft...[/]");
+                AnsiConsole.MarkupLine("\n[grey]Verificando credenciais da Microsoft...[/]");
+                AnsiConsole.MarkupLine("[grey](Se necessário, uma janela de login será aberta)[/]");
+
+                var session = await _loginHandler.Authenticate();
                 
-                var session = await _loginHandler.AuthenticateSilently();
-                
-                AnsiConsole.MarkupLine($"[green]Sessão restaurada! Bem-vindo de volta, {session.Username}![/]");
+                AnsiConsole.MarkupLine($"\n[bold green]Login concluído com sucesso! Bem-vindo, {session.Username}![/]");
                 return session;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                AnsiConsole.MarkupLine("[yellow]Nenhuma sessão válida. Iniciando comunicação com o Xbox...[/]");
-
-                var app = await MsalClientHelper.BuildApplicationWithCache(_clientId);
-                var authenticator = _loginHandler.CreateAuthenticatorWithNewAccount();
-
-                // --- ESCOLHA O MÉTODO DE LOGIN AQUI ---
-
-                // MÉTODO 1 (Comentado): Browser Automático (Usar este quando o seu ClientID for aprovado)
-                authenticator.AddMsalOAuth(app, msal => msal.SystemBrowser());
-                authenticator.AddXboxAuthForJE(xbox => xbox.Basic());
-                authenticator.AddJEAuthenticator();
-
-                AnsiConsole.Markup("\n[cyan]Aguardando autorização... (Siga as instruções acima)[/]");
-
-                var session = await authenticator.ExecuteForLauncherAsync();
-                
-                AnsiConsole.MarkupLine($"\n\n[bold green]Login original concluído! Bem-vindo, {session.Username}![/]");
-                return session;
+                throw new Exception($"Operação cancelada ou falha na autenticação: {ex.Message}");
             }
         }
     }

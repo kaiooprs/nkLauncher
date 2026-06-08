@@ -2,5 +2,8 @@
 bin/
 obj/
 
+# Sessão offline
+last_session.txt
+
 # Pastas do VS Code
 .vscode/

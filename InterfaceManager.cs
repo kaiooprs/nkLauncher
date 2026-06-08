@@ -72,11 +72,11 @@ namespace nkLauncher
             return AnsiConsole.Confirm($"Você tem certeza que deseja deletar a versão [red]{versao}[/]?");
         }
 
-        public void LimparEHeader()
+        public void LimparEHeader(string nick)
         {
             AnsiConsole.Clear();
             AnsiConsole.Write(new FigletText("nkLauncher").LeftJustified().Color(Color.Green));
-            AnsiConsole.MarkupLine("[grey]O launcher minimalista e direto ao ponto.[/]\n");
+            AnsiConsole.MarkupLine($"[grey]O launcher minimalista e direto ao ponto. | Usuário:[/] [bold blue]{nick}[/]\n");
         }
 
         public void MostrarResumo(string nick, string origem, string versao, int ramMb)
