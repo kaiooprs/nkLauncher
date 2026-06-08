@@ -89,7 +89,12 @@ namespace nkLauncher
                     AnsiConsole.MarkupLine("\n[green]Pressione Enter para iniciar...[/]");
                     Console.ReadLine();
                     AnsiConsole.Clear();
+
+                    AnsiConsole.MarkupLine("[grey]Iniciando o jogo... O launcher será fechado.[/]");
+
                     await mine.IniciarJogoAsync(versaoEscolhida, ramMb, sessaoAtual);
+                    await Task.Delay(2000);
+                    Environment.Exit(0);
                 }
             }
             AnsiConsole.MarkupLine("[bold]Encerrando... Até mais![/]");

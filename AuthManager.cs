@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Auth.Microsoft;
@@ -14,15 +15,11 @@ namespace nkLauncher
 
         public AuthManager()
         {
-            try
-            {
-                _clientId = System.IO.File.ReadAllText("client_id.txt").Trim();
-            }
-            catch
-            {
-                AnsiConsole.MarkupLine("[red]Erro: Arquivo 'client_id.txt' não encontrado na pasta do projeto![/]");
-                Environment.Exit(1);
-            }
+           string ofuscado = "NTIzNDE3ZjktODIzNS00YzQ4LWE3ODUtMDkwNDBkYzJkYTVj";
+
+           byte[] dados = Convert.FromBase64String(ofuscado);
+            _clientId = Encoding.UTF8.GetString(dados);
+
             _loginHandler = JELoginHandlerBuilder.BuildDefault();
         }
 
